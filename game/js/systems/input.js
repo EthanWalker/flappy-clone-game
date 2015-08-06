@@ -13,7 +13,7 @@ InputSystem.prototype.run = function() {
 InputSystem.prototype.onClick = function(e) {
     e.preventDefault();
     var bird = this.entities[0];
-    bird.components.physics.velocity.y = 0.7;
+    bird.components.physics.velocity.y = 0.2;
 };
 
 exports.InputSystem = InputSystem;

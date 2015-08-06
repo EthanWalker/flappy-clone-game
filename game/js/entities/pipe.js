@@ -1,5 +1,6 @@
-var graphicsComponent = require("../components/graphics/pipe");
 var physicsComponent = require("../components/physics/physics");
+var graphicsComponent = require("../components/graphics/pipe");
+var collisionComponent = require("../components/collision/rect");
 
 var Pipe = function(pos) {
     var physics = new physicsComponent.PhysicsComponent(this);
@@ -8,9 +9,13 @@ var Pipe = function(pos) {
     physics.velocity.x = -0.3;
 
     var graphics = new graphicsComponent.PipeGraphicsComponent(this);
+    var collision = new collisionComponent.RectCollisionComponent(this, {x: 0.1, y: 1});
+
     this.components = {
+        physics: physics,
         graphics: graphics,
-        physics: physics
+        collision: collision
+        
     };
 };
 
