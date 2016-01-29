@@ -142,10 +142,10 @@ var PipeGraphicsComponent = function(entity) {
 
 PipeGraphicsComponent.prototype.draw = function(context) {
     var position = this.entity.components.physics.position;
-
+    var size = this.entity.components.size;
     context.save();
-    context.translate(position.x, position.y);
-    context.fillRect(0, 0, 0.1, 1);
+    //context.translate(position.x, position.y);
+    context.fillRect((position.x-0.05), (position.y-0.5), 0.1, 1);
     context.restore();
 };
 
@@ -243,7 +243,7 @@ Floor.prototype.onCollision = function(entity, entities) {
         entities.push(new bird.Bird(), new Floor(), new roof.Roof(), new stageLeft.StageLeft());
     }
     else{
-        console.log("Disaster averted...");
+        //console.log("Disaster averted...");
     }
 };
 
@@ -255,6 +255,7 @@ var graphicsComponent = require("../components/graphics/pipe");
 var collisionComponent = require("../components/collision/rect");
 
 var Pipe = function(pos) {
+    this.isPipe = true;
     var physics = new physicsComponent.PhysicsComponent(this);
     physics.position.x = pos.x;
     physics.position.y = pos.y;
@@ -304,7 +305,7 @@ Roof.prototype.onCollision = function(entity, entities) {
         entities.push(new bird.Bird(), new floor.Floor(), new Roof(), new stageLeft.StageLeft());
     }
     else{
-        console.log("Disaster averted...");
+        //console.log("Disaster averted...");
     }
 };
 
@@ -317,7 +318,7 @@ var garbageComponent = require("../components/garbage/pipe");
 
 var StageLeft = function() {
     var physics = new physicsComponent.PhysicsComponent(this);
-    physics.position.x = -50;
+    physics.position.x = -1.5;
     physics.position.y = -0.5;
 
     var collision = new collisionComponent.RectCollisionComponent(this, {x: 0.5, y: 1});
@@ -375,7 +376,7 @@ exports.FlappyBird = FlappyBird;
 },{"./entities/bird":7,"./entities/floor":8,"./entities/pipe":9,"./entities/roof":10,"./entities/stageLeft":11,"./systems/garbage":15,"./systems/graphics":16,"./systems/input":17,"./systems/physics":18,"./systems/pipe":19}],13:[function(require,module,exports){
 var flappyBird = require('./flappy_bird');
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {    
     var app = new flappyBird.FlappyBird();
     app.run();
 });
@@ -436,6 +437,8 @@ GarbageSystem.prototype.tick = function() {
             continue;
         }
         if (entity.components.garbage.deleteNow) {
+            console.log(this.entities.length);
+            
             this.entities.remove(i);
             i--;
         }
@@ -507,10 +510,12 @@ InputSystem.prototype.onClick = function(e) {
 exports.InputSystem = InputSystem;
 },{}],18:[function(require,module,exports){
 var collisionSystem = require("./collision");
+var scoringSystem = require("./scoring");
 
 var PhysicsSystem = function(entities) {
     this.entities = entities;
     this.collisionSystem = new collisionSystem.CollisionSystem(entities);
+    this.scoringSystem = new scoringSystem.ScoringSystem(entities);
 };
 
 PhysicsSystem.prototype.run = function() {
@@ -528,10 +533,11 @@ PhysicsSystem.prototype.tick = function() {
         entity.components.physics.update(1/60);
     }
     this.collisionSystem.tick();
+    this.scoringSystem.tick();
 };
 
 exports.PhysicsSystem = PhysicsSystem;
-},{"./collision":14}],19:[function(require,module,exports){
+},{"./collision":14,"./scoring":20}],19:[function(require,module,exports){
 var pipe = require('../entities/pipe');
 
 var PipeSystem = function(entities) {
@@ -547,9 +553,20 @@ PipeSystem.prototype.tick = function(){
     // console.log("pipe tick");
     // new pipe.Pipe({x: 0.5, y: 0}), new pipe.Pipe({x: 0.5, y: 0.6})
     var randomNum = ((Math.random() * 0.8) - 0.4);
-    this.entities.push(new pipe.Pipe({x: 0.5, y: randomNum - 0.6}), new pipe.Pipe({x: 0.5, y: (randomNum + 0.6)}));
+    this.entities.push(new pipe.Pipe({x: 0.5, y: randomNum - 0.8}), new pipe.Pipe({x: 0.5, y: (randomNum + 0.8)}));
 };
 
 
 exports.PipeSystem = PipeSystem;
-},{"../entities/pipe":9}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
+},{"../entities/pipe":9}],20:[function(require,module,exports){
+var ScoringSystem = function(entities) {
+    this.entities = entities;
+};
+
+ScoringSystem.prototype.tick = function(){
+    //birdX - birdRadius > pipeX+ .5pipeSizeX
+};
+
+
+exports.ScoringSystem = ScoringSystem;
+},{}]},{},[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);

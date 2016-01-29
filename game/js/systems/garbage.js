@@ -20,6 +20,8 @@ GarbageSystem.prototype.tick = function() {
             continue;
         }
         if (entity.components.garbage.deleteNow) {
+            console.log(this.entities.length);
+            
             this.entities.remove(i);
             i--;
         }

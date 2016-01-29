@@ -29,7 +29,7 @@ Floor.prototype.onCollision = function(entity, entities) {
         entities.push(new bird.Bird(), new Floor(), new roof.Roof(), new stageLeft.StageLeft());
     }
     else{
-        console.log("Disaster averted...");
+        //console.log("Disaster averted...");
     }
 };
 

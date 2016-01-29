@@ -3,6 +3,7 @@ var graphicsComponent = require("../components/graphics/pipe");
 var collisionComponent = require("../components/collision/rect");
 
 var Pipe = function(pos) {
+    this.isPipe = true;
     var physics = new physicsComponent.PhysicsComponent(this);
     physics.position.x = pos.x;
     physics.position.y = pos.y;

@@ -4,7 +4,7 @@ var garbageComponent = require("../components/garbage/pipe");
 
 var StageLeft = function() {
     var physics = new physicsComponent.PhysicsComponent(this);
-    physics.position.x = -50;
+    physics.position.x = -1.5;
     physics.position.y = -0.5;
 
     var collision = new collisionComponent.RectCollisionComponent(this, {x: 0.5, y: 1});
